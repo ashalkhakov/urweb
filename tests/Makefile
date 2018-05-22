@@ -22,6 +22,9 @@ simple::
 	./driver.sh autocomp
 	./driver.sh babySpawn
 	./driver.sh bindpat
+	./driver.sh blobOpt
+	./driver.sh both2
+	./driver.sh both
 	./driver.sh DynChannel
 	./driver.sh jsonTest
 	./driver.sh entities

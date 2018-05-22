@@ -1,7 +1,7 @@
 sequence s
 table t : { Id : int, Data : option blob, Typ : string }
 
-fun view id =
+fun viewPage id =
     r <- oneRow (SELECT t.Data, t.Typ FROM t WHERE t.Id = {[id]});
     case r.T.Data of
         None => return <xml>This one's empty.</xml>
@@ -21,18 +21,22 @@ and saveEmpty () =
 
 and main () =
     ls <- queryX (SELECT t.Id FROM t)
-          (fn r => <xml><li><a link={view r.T.Id}>{[r.T.Id]}</a></li></xml>);
+          (fn r => <xml><li><a link={viewPage r.T.Id}>{[r.T.Id]}</a></li></xml>);
     return <xml><body>
-      {ls}
+      <h1>Uploaded files</h1>
 
-      <br/>
+      <ul>
+	{ls}
+      </ul>
+
+      <h1>Upload stuff!</h1>
 
       <form>
         <upload{#Data}/>
-        <submit action={save}/>
+        <submit action={save}>Upload a file</submit>
       </form>
 
       <form>
-        <submit action={saveEmpty}/>
+        <submit action={saveEmpty}>Upload an empty file</submit>
       </form>
     </body></xml>
