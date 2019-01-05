@@ -1,9 +1,10 @@
-val page = fn p :: (Type * Type) => fn f : p.1 -> string => fn x : p.1 => <html><body>
+val fpage = fn [p :: (Type * Type)] => fn (f : p.1 -> string) => fn (x : p.1) => (return <xml><body>
         {cdata (f x)}
-</body></html>
+</body></xml>) : transaction page
 
-val page_string = page [(string, int)] (fn x => x)
+val page_string =
+    fpage [(string, int)] (fn x => x)
 
-val main : unit -> page = fn () => <html><body>
+val main : unit -> transaction page = fn () => return <xml><body>
         <a link={page_string "Hi"}>Hi</a>
-</body></html>
+</body></xml>

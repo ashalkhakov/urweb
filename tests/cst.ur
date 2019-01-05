@@ -15,12 +15,12 @@ table t : {A : int, B : int, C : option int}
   CONSTRAINT UniBoth UNIQUE (A, B),
 
   CONSTRAINT UniAm UNIQUE {#A},
-  CONSTRAINT UniAm2 {unique [#A] [[]] ! !},
-  {{one_constraint [#UniAm3] (unique [#A] [[]] ! !)}},
+  CONSTRAINT UniAm2 {@unique [#A] [[]] ! !},
+  {{one_constraint [#UniAm3] (@unique [#A] [[]] ! !)}},
 
   CONSTRAINT UniBothm UNIQUE ({#A}, {#B}),
-  CONSTRAINT UniBothm2 {unique [#A] [[B = _]] ! !},
-  {{one_constraint [#UniBothm3] (unique [#A] [[B = _]] ! !)}},
+  CONSTRAINT UniBothm2 {@unique [#A] [[B = _]] ! !},
+  {{one_constraint [#UniBothm3] (@unique [#A] [[B = _]] ! !)}},
 
   CONSTRAINT ForA FOREIGN KEY A REFERENCES u (C),
   CONSTRAINT ForAB FOREIGN KEY (A, B) REFERENCES u (D, C) ON DELETE CASCADE ON UPDATE RESTRICT,
@@ -38,4 +38,4 @@ table s2 : {B : option int}
 
 fun main () : transaction page =
     queryI (SELECT * FROM t) (fn _ => return ());
-    return <xml/>
+    return <xml></xml>

@@ -1,10 +1,10 @@
-val handler = fn x => <html><body>
+val handler = fn x => return <xml><body>
         {if x.A then cdata "Yes" else cdata "No"}
-</body></html>
+</body></xml>
 
-val main = fn () => <html><body>
-        <lform>
+val main = fn () => return <xml><body>
+        <form>
                 <checkbox{#A}/> How about it?<br/>
                 <submit action={handler}/>
-        </lform>
-</body></html>
+        </form>
+</body></xml>

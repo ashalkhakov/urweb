@@ -34,6 +34,26 @@ simple::
 	./driver.sh cdataF
 	./driver.sh cdataL
 	./cffi.sh
+	./driver.sh cfold_disj
+	./driver.sh char
+	./driver.sh checkbox
+	./driver.sh classAndDynClass
+	./driver.sh classy_form
+	./driver.sh coalesce
+	./driver.sh comment
+	./driver.sh concat
+	./driver.sh consub
+	./driver.sh contentDisposition
+	./driver.sh cselect
+	./driver.sh css
+	./driver.sh cssNull
+	./driver.sh cst
+	./driver.sh ctextarea
+	./driver.sh ctextbox
+	./driver.sh ctextboxAttrs
+	./driver.sh ctuple
+	./driver.sh cut
+	./driver.sh cyrillic
 	./driver.sh DynChannel
 	./driver.sh jsonTest
 	./driver.sh entities

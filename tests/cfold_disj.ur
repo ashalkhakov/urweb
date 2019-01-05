@@ -1,4 +1,4 @@
-con id = fold (fn nm => fn t :: Type => fn acc => [nm] ~ acc => [nm = t] ++ acc) []
+con id = fn x => x
 
 con idT = id [D = int, E = float]
 
