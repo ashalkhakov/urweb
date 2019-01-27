@@ -5036,41 +5036,57 @@ fun elabFile basis basis_tm topStr topSgn top_tm env file =
                 open Print
 
                 fun p_con env c = ElabPrint.p_con env (ElabOps.reduceCon env c)
+                fun p_loc span =
+                    let
+                        fun p_pos pos =
+                            box [string "{",
+                                 string "\"line\": ", string (Int.toString (#line pos)), string ",",
+                                 string "\"col\": ", string (Int.toString (#char pos)),
+                                 string "}"]
+                    in
+                        box [
+                            string "{",
+                            string "\"source\": \"", string (#file span), string "\",",
+                            string "\"start\": ", p_pos (#first span), string ",",
+                            string "\"end\": ", p_pos (#last span),
+                            string "}"
+                        ]
+                    end
 
                 fun dumpDecl (d, env) =
                     case #1 d of
-                        DCon (x, _, k, _) => (print (box [string x,
-                                                          space,
-                                                          string "::",
-                                                          space,
-                                                          p_kind env k,
-                                                          newline,
-                                                          newline]);
-                                              E.declBinds env d)
-                      | DVal (x, _, t, _) => (print (box [string x,
-                                                          space,
-                                                          string ":",
-                                                          space,
-                                                          p_con env t,
-                                                          newline,
-                                                          newline]);
-                                              E.declBinds env d)
-                      | DValRec vis => (app (fn (x, _, t, _) => print (box [string x,
-                                                                            space,
-                                                                            string ":",
-                                                                            space,
-                                                                            p_con env t,
-                                                                            newline,
-                                                                            newline])) vis;
+                        DCon (x, _, k, _) =>
+                        (print (box [string ("{\"type\": \"con\","), newline,
+                                     string ("\"id\": \"" ^ x ^ "\","), newline,
+                                     string ("\"loc\": "), p_loc (#2 d), string ",", newline,
+                                     string ("\"annotation\": \""), p_kind env k, string "\"", newline,
+                                     string "},", newline]);
+                         E.declBinds env d)
+                      | DVal (x, _, t, _) =>
+                        (print (box [string ("{\"type\": \"val\","), newline,
+                                     string ("\"id\": \"" ^ x ^ "\","), newline,
+                                     string ("\"loc\": "), p_loc (#2 d), string ",", newline,
+                                     string ("\"annotation\": \""), p_con env t, string "\"", newline,
+                                     string "},", newline]);
+                         E.declBinds env d)
+                      | DValRec vis => (app (fn (x, _, t, _) =>
+                                                (print (box [string ("{\"type\": \"val\","), newline,
+                                                             string ("\"id\": \"" ^ x ^ "\","), newline,
+                                                             string ("\"loc\": "), p_loc (#2 d), string ",", newline,
+                                                             string ("\"type\": \""), p_con env t, string "\"", newline,
+                                                             string "},", newline]))) vis;
                                         E.declBinds env d)
-                      | DStr (x, _, _, str) => (print (box [string ("<" ^ x ^ ">"),
-                                                            newline,
-                                                            newline]);
-                                                dumpStr (str, env);
-                                                print (box [string ("</" ^ x ^ ">"),
-                                                            newline,
-                                                            newline]);
-                                                E.declBinds env d)
+                      | DStr (x, _, _, str) =>
+                        (print (box [string ("{\"type\": \"structure\","), newline,
+                                     string ("\"id\": \"" ^ x ^ "\","), newline,
+                                     string ("\"loc\": "), p_loc (#2 d), string ",", newline,
+                                     string ("\"body\": ["), newline
+                               ]);
+                         dumpStr (str, env);
+                         print (box [string ("]"), newline,
+                                     string ("}"), newline,
+                                     newline]);
+                         E.declBinds env d)
                       | _ => E.declBinds env d
 
                 and dumpStr (str, env) =
